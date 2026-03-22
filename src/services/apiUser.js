@@ -23,3 +23,23 @@ const API_URL = 'http://localhost:5000/Users';
 export async function getAllUsers() {
     return await axio.get(`${API_URL}/getAllUsers`);    
 }
+
+export async function deleteUser(id) {
+    return await axio.delete(`${API_URL}/deleteUser/${id}`);
+}
+
+export async function addUser(userData) {
+    return await axio.post(`${API_URL}/addUser`, userData);
+}
+
+export async function updateUser(id, userData) {
+    return await axio.put(`${API_URL}/updateUser/${id}`, userData);
+}
+
+export async function getUserById(id) {
+    return await axio.get(`${API_URL}/getUserById/${id}`);
+}
+
+export async function getbyEmail(email) {
+    return await axio.get(`${API_URL}/getbyEmail/`,email);
+}

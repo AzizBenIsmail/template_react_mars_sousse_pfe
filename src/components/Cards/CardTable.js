@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 // components
 
-import {getAllUsers} from "../..//services/apiUser";
+import { getAllUsers, deleteUser } from "../..//services/apiUser";
 export default function CardTable({ color }) {
   const [users, setUsers] = React.useState([]);
 
@@ -14,11 +14,19 @@ export default function CardTable({ color }) {
     } catch (error) {
       console.error("Error fetching users:", error);
     }
-  }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteUser(id);
+      fetchUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   React.useEffect(() => {
     fetchUsers();
-    console.log(users);
   }, []);
 
   return (
@@ -115,46 +123,51 @@ export default function CardTable({ color }) {
                 <tr key={user.id}>
                   <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                     <img
-                      src={require("assets/img/bootstrap.jpg").default}
+                      src={`http://localhost:5000/images/${user.user_image}`}
                       className="h-12 w-12 bg-white rounded-full border"
                       alt="..."
                     ></img>{" "}
                     <span
                       className={
                         "ml-3 font-bold " +
-                        +(color === "light" ? "text-blueGray-600" : "text-white")
+                        +(color === "light"
+                          ? "text-blueGray-600"
+                          : "text-white")
                       }
                     >
                       {user.email}
                     </span>
-                </th>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {user.role}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {user.age}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {user.location}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {user.created_at}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                  <button
-                    className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    update
-                  </button>
-                  <button
-                    className="bg-red-500 text-white active:bg-lightBlue-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    delete
-                  </button>
-                </td>
-              </tr>
+                  </th>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {user.role}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {user.age}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {user.location}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {user.createdAt}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                    <button
+                      className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      update
+                    </button>
+                    <button
+                      className="bg-red-500 text-white active:bg-lightBlue-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => {
+                        handleDelete(user._id);
+                      }}
+                    >
+                      delete
+                    </button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
